@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class levitate : MonoBehaviour
 {
-    public int upwardForce = 5;
+
+    [Header("Forces")]
+    public int upwardForce = 20;
     public int forwardForce = 5;
+    public int downwardForce = 10;
+    [Header("Rotation Speeds")]
     public int rotateSpeed = 5;
     public int childRotateSpeed = 5;
     public Transform car;
@@ -20,15 +24,29 @@ public class levitate : MonoBehaviour
     void Update()
     {
         Movement();
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, 1f))
+        RaycastHit upwardHit;
+        RaycastHit downardHit;
+        if (Physics.Raycast(transform.position, -transform.up, out upwardHit, 1f))
         {
-            Debug.Log("hit");
+            Debug.Log("Force Up");
             GetComponent<Rigidbody>().AddForce(transform.up * upwardForce);
-        }
- 
 
+        }
+        if(Physics.Raycast(transform.position, -transform.up, out downardHit, 5f))
+        {
+
+            GetComponent<Rigidbody>().useGravity = false;
+            Debug.Log("Force Down");
+            GetComponent<Rigidbody>().AddForce(-transform.up * downwardForce);
+        }
+        else
+        {
+            GetComponent<Rigidbody>().useGravity = true;
+        }
     }
+    /// <summary>
+    /// Controls movement through wasd
+    /// </summary>
     void Movement()
     {
         if (Input.GetKey(KeyCode.W))
