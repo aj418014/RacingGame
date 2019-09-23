@@ -34,13 +34,14 @@ public class levitate : MonoBehaviour
             GetComponent<Rigidbody>().AddForce(transform.up * upwardForce);
 
         }
-        if(Physics.Raycast(transform.position, -transform.up, out downardHit, 5f))
+        if (Physics.Raycast(transform.position, -transform.up, out downardHit, 5f))
         {
             GetComponent<Rigidbody>().useGravity = false;
             Debug.Log("Force Down");
             GetComponent<Rigidbody>().AddForce(-transform.up * downwardForce);
-            desiredRotation = Quaternion.FromToRotation(transform.up, downardHit.normal) * transform.rotation;
-            transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, .3f);
+
+                desiredRotation = Quaternion.FromToRotation(transform.up, downardHit.normal) * transform.rotation;
+                transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, .1f);
         }
         else
         {
@@ -55,7 +56,7 @@ public class levitate : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             GetComponent<Rigidbody>().AddForce(transform.forward * forwardForce * Time.deltaTime);
-
+            
         }
         if (Input.GetKey(KeyCode.S))
         {
