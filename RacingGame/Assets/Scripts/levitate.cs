@@ -34,7 +34,7 @@ public class levitate : MonoBehaviour
             GetComponent<Rigidbody>().AddForce(transform.up * upwardForce);
 
         }
-        if (Physics.Raycast(transform.position, -transform.up, out downardHit, 5f))
+        if (Physics.Raycast(transform.position, -transform.up, out downardHit, 10f))
         {
             GetComponent<Rigidbody>().useGravity = false;
             Debug.Log("Force Down");
@@ -46,7 +46,8 @@ public class levitate : MonoBehaviour
         else
         {
             GetComponent<Rigidbody>().useGravity = true;
-        }
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, .01f);
+            }
     }
     /// <summary>
     /// Controls movement through wasd
