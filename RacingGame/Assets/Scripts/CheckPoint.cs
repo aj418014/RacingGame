@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-    public GameObject carboi;
+    public List<GameObject> carboi;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == carboi)
+        for (int i = 0; i < carboi.Count; i++)
         {
-            other.gameObject.GetComponent<Laps>().passedCheckPoint = true;
+            if (other.gameObject == carboi[i])
+            {
+                other.gameObject.GetComponent<Laps>().passedCheckPoint = true;
+                return;
+            }
         }
     }
 
