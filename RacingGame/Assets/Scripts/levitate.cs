@@ -14,6 +14,8 @@ public class levitate : MonoBehaviour
     public int childRotateSpeed = 5;
     public Transform car;
     public float childYRotationAddition;
+    public float myYRotation;
+    Quaternion desiredRotation;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,10 +36,11 @@ public class levitate : MonoBehaviour
         }
         if(Physics.Raycast(transform.position, -transform.up, out downardHit, 5f))
         {
-
             GetComponent<Rigidbody>().useGravity = false;
             Debug.Log("Force Down");
             GetComponent<Rigidbody>().AddForce(-transform.up * downwardForce);
+            desiredRotation = Quaternion.FromToRotation(transform.up, downardHit.normal) * transform.rotation;
+            transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, .3f);
         }
         else
         {
@@ -60,14 +63,12 @@ public class levitate : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.A))
         {
-            transform.eulerAngles = new Vector3
-                (transform.eulerAngles.x, transform.eulerAngles.y - (rotateSpeed * Time.deltaTime), transform.eulerAngles.z);
+            transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
             childYRotationAddition -= 45 * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            transform.eulerAngles = new Vector3
-                (transform.eulerAngles.x, transform.eulerAngles.y + (rotateSpeed * Time.deltaTime), transform.eulerAngles.z);
+            transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
             childYRotationAddition += 45 * Time.deltaTime;
         }
         if (!Input.GetKey(KeyCode.D))
