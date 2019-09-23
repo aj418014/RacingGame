@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class levitate : MonoBehaviour
 {
-    public int upwardForce = 5;
+
+    [Header("Forces")]
+    public int upwardForce = 20;
     public int forwardForce = 5;
+    public int downwardForce = 10;
+    [Header("Rotation Speeds")]
     public int rotateSpeed = 5;
     public int childRotateSpeed = 5;
     public Transform car;
     public float childYRotationAddition;
+    public float myYRotation;
+    Quaternion desiredRotation;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,21 +26,38 @@ public class levitate : MonoBehaviour
     void Update()
     {
         Movement();
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, 1f))
+        RaycastHit upwardHit;
+        RaycastHit downardHit;
+        if (Physics.Raycast(transform.position, -transform.up, out upwardHit, 1f))
         {
-            Debug.Log("hit");
+            Debug.Log("Force Up");
             GetComponent<Rigidbody>().AddForce(transform.up * upwardForce);
-        }
- 
 
+        }
+        if (Physics.Raycast(transform.position, -transform.up, out downardHit, 10f))
+        {
+            GetComponent<Rigidbody>().useGravity = false;
+            Debug.Log("Force Down");
+            GetComponent<Rigidbody>().AddForce(-transform.up * downwardForce);
+
+                desiredRotation = Quaternion.FromToRotation(transform.up, downardHit.normal) * transform.rotation;
+                transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, .1f);
+        }
+        else
+        {
+            GetComponent<Rigidbody>().useGravity = true;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, .01f);
+            }
     }
+    /// <summary>
+    /// Controls movement through wasd
+    /// </summary>
     void Movement()
     {
         if (Input.GetKey(KeyCode.W))
         {
             GetComponent<Rigidbody>().AddForce(transform.forward * forwardForce * Time.deltaTime);
-
+            
         }
         if (Input.GetKey(KeyCode.S))
         {
@@ -42,14 +65,12 @@ public class levitate : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.A))
         {
-            transform.eulerAngles = new Vector3
-                (transform.eulerAngles.x, transform.eulerAngles.y - (rotateSpeed * Time.deltaTime), transform.eulerAngles.z);
+            transform.Rotate(0, -rotateSpeed * Time.deltaTime, 0);
             childYRotationAddition -= 45 * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            transform.eulerAngles = new Vector3
-                (transform.eulerAngles.x, transform.eulerAngles.y + (rotateSpeed * Time.deltaTime), transform.eulerAngles.z);
+            transform.Rotate(0, rotateSpeed * Time.deltaTime, 0);
             childYRotationAddition += 45 * Time.deltaTime;
         }
         if (!Input.GetKey(KeyCode.D))
