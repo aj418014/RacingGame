@@ -27,7 +27,11 @@ public class TimerScript : MonoBehaviour
         float minutes = ((int)t / 60);
         float seconds = ((int)t % 60);
         int centiseconds = (int)((t - (minutes * 60) - seconds) * 100);
-        timerText.text = minutes + ":" + seconds + ':' + centiseconds;
+        string minutesString = minutes.ToString("00");
+        string secondsString = seconds.ToString("00");
+        string centisecondsString = centiseconds.ToString("00");
+        timerText.text = minutesString + ':' + secondsString + ':' + centisecondsString;
+
     }
 
     public void Finish()

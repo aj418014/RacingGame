@@ -40,13 +40,15 @@ public class levitate : MonoBehaviour
             Debug.Log("Force Down");
             GetComponent<Rigidbody>().AddForce(-transform.up * downwardForce);
 
-                desiredRotation = Quaternion.FromToRotation(transform.up, downardHit.normal) * transform.rotation;
-                transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, .1f);
+            desiredRotation = Quaternion.FromToRotation(transform.up, downardHit.normal) * transform.rotation;
+            transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, .1f);
+            forwardForce = 1200;
         }
         else
         {
             GetComponent<Rigidbody>().useGravity = true;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, .01f);
+            forwardForce = 0;
             }
     }
     /// <summary>
