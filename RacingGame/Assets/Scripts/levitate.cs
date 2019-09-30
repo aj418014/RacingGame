@@ -48,7 +48,28 @@ public class levitate : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, .01f);
             if(gameObject.tag == "Player")
                 GetComponent<Movement>().forwardForce = 0;
-            }
+        }
+        if(Input.GetKey(KeyCode.A))
+        {
+            childYRotationAddition -= 45 * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            childYRotationAddition += 45 * Time.deltaTime;
+        }
+        if(childYRotationAddition > .1f)
+        {
+            childYRotationAddition -= 45 * Time.deltaTime;
+        }
+        if(childYRotationAddition < -.1f)
+        {
+            childYRotationAddition += 45 * Time.deltaTime;
+        }
+        if (childYRotationAddition > 45)
+            childYRotationAddition = 45;
+        if (childYRotationAddition < -45)
+            childYRotationAddition = -45;
+        car.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + childYRotationAddition, transform.eulerAngles.z);
     }
     /// <summary>
     /// Controls movement through wasd
