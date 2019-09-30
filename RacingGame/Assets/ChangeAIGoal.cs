@@ -4,23 +4,31 @@ using UnityEngine;
 
 public class ChangeAIGoal : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Transform[] myCheckpoints;
+    private void Awake()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.tag == "Enemy")
+        myCheckpoints = new Transform[transform.childCount];
+        for(int i = 0; i < transform.childCount; i++)
         {
-            print("Enemy Checkpoint Reached");
-            other.GetComponent<AIBehaviour>().IncrementCheckpoint();
+            myCheckpoints[i] = transform.GetChild(i);
+        }
+        
+    }
+    public void ChangeGoal(GameObject enemy)
+    {
+        enemy.GetComponent<AIBehaviour>().IncrementCheckpoint();
+        print("Enemy Checkpoint Reached");
+    }
+    public Transform SetGoal(int minPriority, int maxPriority)
+    {
+        int randomNumber = Random.Range(1, 6);
+       if(myCheckpoints[randomNumber].GetComponent<AICheckpointTrigger>().priority <= maxPriority && myCheckpoints[randomNumber].GetComponent<AICheckpointTrigger>().priority >= minPriority)
+        {
+            return myCheckpoints[randomNumber];
+        }
+       else
+        {
+            return SetGoal(minPriority, maxPriority);
         }
     }
 }
