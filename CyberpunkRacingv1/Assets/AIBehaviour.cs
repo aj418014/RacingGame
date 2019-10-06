@@ -10,6 +10,8 @@ public class AIBehaviour : MonoBehaviour
     public int level;
     int minPriority;
     int maxPriority;
+    Quaternion previousRotation;
+    float force = 800;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,8 +50,13 @@ public class AIBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(currentCheckpoint);
-        GetComponent<Rigidbody>().AddForce(transform.forward * 800 * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(currentCheckpoint.position - transform.position), .08f);
+        GetComponent<Rigidbody>().AddForce(transform.forward * force * Time.deltaTime);
+        //if (previousRotation != transform.rotation)
+        //    force = 200;
+        //else
+        //    force = 800;
+        //previousRotation = transform.rotation;
     }
     public void  IncrementCheckpoint()
     {
