@@ -1,14 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class WinScript : MonoBehaviour
 {
     public List<GameObject> carboi;
     public int maxLaps;
     public List<GameObject> places;
     bool isACarboi;
-
+    public Transform[] placesDisplay;
+    public GameObject[] placesBackground;
+    int k = 0;
+    float timer = 10;
+    bool playTimer = false;
+    private void Start()
+    {
+        
+    }
+    private void Update()
+    {
+        if (playTimer == true)
+            timer -= Time.deltaTime;
+        if (timer < 0)
+            SceneManager.LoadScene(0);
+    }
     private void OnTriggerEnter(Collider other)
     {
         isACarboi = false;
@@ -21,8 +37,13 @@ public class WinScript : MonoBehaviour
             }
             if (isACarboi == true && other.gameObject.GetComponent<Laps>().currentLap == maxLaps && other.gameObject.GetComponent<Laps>().hasFinished == false)
             {
+                placesDisplay[k].GetComponent<Text>().text = (k + 1).ToString() + ": " + other.gameObject.name;
+                placesBackground[k].SetActive(true);
                 other.gameObject.GetComponent<Laps>().hasFinished = true;
                 places.Add(other.gameObject);
+                if(other.gameObject.tag == "Player")
+                    GameObject.Find("TimeText").GetComponent<TimerScript>().Finish();
+                k++;
 
             }
             else
@@ -30,16 +51,12 @@ public class WinScript : MonoBehaviour
                 other.gameObject.GetComponent<Laps>().currentLap++;
                 other.gameObject.GetComponent<Laps>().passedCheckPoint = false;
             }
-            if(places.Count == carboi.Count)
+            if(carboi.Count == places.Count)
             {
-                GameObject.Find("TimeText").GetComponent<TimerScript>().Finish();
-
-                for (int i = 0; i < places.Count; i++)
-                {
-                    string placement = (i + 1).ToString();
-                    print(placement + ':' + places[i].name);
-                }
+                playTimer = true;
             }
+
+
         }
 
     }

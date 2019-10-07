@@ -41,7 +41,7 @@ public class levitate : MonoBehaviour
                 else
                     transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, .45f);
                 if (gameObject.tag == "Player")
-                    GetComponent<Movement>().forwardForce = 1200;
+                    GetComponent<Movement>().forwardForce = 800;
             }
         }
         else
