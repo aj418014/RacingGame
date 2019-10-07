@@ -53,7 +53,7 @@ public class AIBehaviour : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(currentCheckpoint.position - transform.position), .08f);
         GetComponent<Rigidbody>().AddForce(transform.forward * force * Time.deltaTime);
         //if (previousRotation != transform.rotation)
-        //    force = 200;
+        //    force = 600;
         //else
         //    force = 800;
         //previousRotation = transform.rotation;
